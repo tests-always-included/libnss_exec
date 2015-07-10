@@ -179,7 +179,7 @@ long field_parse_long(field_parse_info *info) {
         i ++;
     }
 
-    while (! IS_FIELD_SEPARATOR(info->output[i])) {
+    if (IS_FIELD_SEPARATOR(info->output[i])){
         i ++;
     }
 
