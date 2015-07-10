@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "test:x:1000:1000::/home/test:/bin/bash"
+exit 0
