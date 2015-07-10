@@ -1,5 +1,6 @@
 CC=gcc
-CFLAGS=-Wall -Wstrict-prototypes -Werror -static -fPIC
+CFLAGS=-Wall -Wstrict-prototypes -Werror -static -fPIC -lpthread
+LIBS=-lpthread
 
 LD_SONAME=-Wl,-soname,libnss_exec.so.2
 LIBRARY=libnss_exec.so.2.0
@@ -12,14 +13,17 @@ OBJECTS=nss_exec.o nss_exec-group.o nss_exec-shadow.o nss_exec-passwd.o
 
 all: $(LIBRARY)
 
-%.o: %.c
+%.o: %.c nss_exec.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBRARY): $(OBJECTS)
-	$(CC) -shared $(LD_SONAME) $< -o $(LIBRARY)
+	$(CC) -shared $(LD_SONAME) $< $(LIBS) -o $(LIBRARY)
+
+nss_test: *.c nss_exec.h
+	$(CC) $(CFLAGS) -DNSS_EXEC_SCRIPT=\"./script\" nss_exec*.c nss_test.c -o nss_test $(LIBS)
 
 clean:
-	rm -rf $(OBJECTS) $(LIBRARY)
+	rm -rf $(OBJECTS) $(LIBRARY) nss_test
 
 install:
 	[ -d $(LIBDIR) ] || install -d $(LIBDIR)

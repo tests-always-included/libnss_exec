@@ -21,3 +21,6 @@
 *.tmp
 *~
 *.swp
+
+# Compiled programs
+nss_test

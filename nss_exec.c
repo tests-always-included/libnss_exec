@@ -259,7 +259,7 @@ enum nss_status nss_exec_script(char **output, char *commandCode, const char *da
     snprintf(command, 1024, "%s %s %s", NSS_EXEC_SCRIPT, commandCode, data ? data : "");
     command[1024] = '\0'; // Ensure there's a null at the end
 
-    fp = popen(NSS_EXEC_SCRIPT, "r");
+    fp = popen(command, "r");
     fgets(line, 1024, fp);
     resultCode = WEXITSTATUS(pclose(fp));
 

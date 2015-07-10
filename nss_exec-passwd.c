@@ -120,9 +120,7 @@ enum nss_status _nss_exec_getpwuid_r(uid_t uid, struct passwd *result, char *buf
 }
 
 
-enum nss_status
-_nss_exec_getpwnam_r_locked(const char *name, struct passwd *result, char *buffer, size_t bufferLength, int *errnop)
-{
+enum nss_status _nss_exec_getpwnam_r_locked(const char *name, struct passwd *result, char *buffer, size_t bufferLength, int *errnop) {
     enum nss_status resultStatus;
     char *output;
     int packResult;

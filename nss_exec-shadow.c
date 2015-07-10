@@ -57,8 +57,7 @@ enum nss_status _nss_exec_setspent(int stayopen) {
 }
 
 
-enum nss_status _nss_exec_endspent_locked(void)
-{
+enum nss_status _nss_exec_endspent_locked(void) {
     enum nss_status result_status;
    
     result_status = nss_exec_script(NULL, "endspent", NULL);
@@ -72,8 +71,7 @@ enum nss_status _nss_exec_endspent_locked(void)
 
 
 // Called to close the shadow file
-enum nss_status _nss_exec_endspent(void)
-{
+enum nss_status _nss_exec_endspent(void) {
     enum nss_status ret;
     NSS_EXEC_LOCK();
     ret = _nss_exec_endspent_locked();
@@ -82,8 +80,7 @@ enum nss_status _nss_exec_endspent(void)
 }
 
 
-enum nss_status _nss_exec_getspent_r_locked(struct spwd *result, char *buffer, size_t bufferLength, int *errnop)
-{
+enum nss_status _nss_exec_getspent_r_locked(struct spwd *result, char *buffer, size_t bufferLength, int *errnop) {
     enum nss_status resultStatus;
     char *output;
     int packResult;
@@ -101,8 +98,7 @@ enum nss_status _nss_exec_getspent_r_locked(struct spwd *result, char *buffer, s
 
 
 // Called to look up next entry in shadow file
-enum nss_status _nss_exec_getspent_r(struct spwd *result, char *buffer, size_t bufferLength, int *errnop)
-{
+enum nss_status _nss_exec_getspent_r(struct spwd *result, char *buffer, size_t bufferLength, int *errnop) {
     enum nss_status ret;
     NSS_EXEC_LOCK();
     ret = _nss_exec_getspent_r_locked(result, buffer, bufferLength, errnop);
@@ -111,8 +107,7 @@ enum nss_status _nss_exec_getspent_r(struct spwd *result, char *buffer, size_t b
 }
 
 
-enum nss_status _nss_exec_getspnam_r_locked(const char *name, struct spwd *result, char *buffer, size_t bufferLength, int *errnop)
-{
+enum nss_status _nss_exec_getspnam_r_locked(const char *name, struct spwd *result, char *buffer, size_t bufferLength, int *errnop) {
     enum nss_status resultStatus;
     char *output;
     int packResult;
@@ -133,8 +128,7 @@ enum nss_status _nss_exec_getspnam_r_locked(const char *name, struct spwd *resul
 
 
 // Find a shadow by name
-enum nss_status _nss_exec_getspnam_r(const char *name, struct spwd *result, char *buffer, size_t bufferLength, int *errnop)
-{
+enum nss_status _nss_exec_getspnam_r(const char *name, struct spwd *result, char *buffer, size_t bufferLength, int *errnop) {
     enum nss_status ret;
     NSS_EXEC_LOCK();
     ret = _nss_exec_getspnam_r_locked(name, result, buffer, bufferLength, errnop);
