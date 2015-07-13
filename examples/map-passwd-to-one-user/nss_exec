@@ -25,6 +25,16 @@ case "$1" in
         # Return code 1 = user not found
         exit 1
         ;;
+
+    getpwuid)
+        if [ "$2" == "5000" ]; then
+            output_user
+            exit 0
+        fi
+
+        # Return code 1 = user not found
+        exit 1
+        ;;
 esac
 
 # Return code 4 = service unavailable
