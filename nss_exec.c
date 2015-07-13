@@ -168,18 +168,26 @@ long field_parse_long(field_parse_info *info) {
 
     i = info->outputOffset;
 
+    // Detect a sign - not sure if it is valid in other parts of the system.
     if (info->output[i] == '-') {
         sign = -1;
         i ++;
     }
 
+    // Consume all numbers
     while (! IS_FIELD_SEPARATOR(info->output[i]) && info->output[i] >= '0' && info->output[i] <= '9') {
         result *= 10;
         result += info->output[i] - '0';
         i ++;
     }
 
-    if (IS_FIELD_SEPARATOR(info->output[i])){
+    // Skip letters, symbols, etc that are left in the field
+    while (! IS_FIELD_SEPARATOR(info->output[i])) {
+        i ++;
+    }
+
+    // Get past the colon
+    if (info->output[i] == ':') {
         i ++;
     }
 
