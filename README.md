@@ -15,7 +15,7 @@ When debugging, make sure to **not** run the caching daemon because they can mas
 Compiling and Installation
 --------------------------
 
-There are no external dependencies that are required.  Just `cd` into the `libnss_http` directory and run:
+There are virtually no external dependencies that are required.  The only thing that might be needed is `pthreads`.  Just `cd` into the `libnss_http` directory and run:
 
     # This builds the library
     make
