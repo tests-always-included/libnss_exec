@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wstrict-prototypes -Werror -static -fPIC -lpthread
+CFLAGS=-Wall -Wstrict-prototypes -Werror -fPIC -lpthread
 LIBS=-lpthread
 
 LD_SONAME=-Wl,-soname,libnss_exec.so.2
@@ -17,7 +17,7 @@ all: $(LIBRARY)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBRARY): $(OBJECTS)
-	$(CC) -shared $(LD_SONAME) $< $(LIBS) -o $(LIBRARY)
+	$(CC) -shared -o $(LIBRARY) $(LD_SONAME) $^ $(LIBS)
 
 nss_test: *.c nss_exec.h
 	$(CC) $(CFLAGS) -DNSS_EXEC_SCRIPT=\"./nss_exec\" nss_exec*.c nss_test.c -o nss_test $(LIBS)
