@@ -23,7 +23,7 @@ There are no external dependencies that are required.  Just `cd` into the `libns
     # Build the test tool as well
     make nss_test
 
-Now you should write a script that handles the various calls your mechanism supports.  After you get the script written and installed as `/sbin/nss_exec_script` then you can install this library.
+Now you should write a script that handles the various calls your mechanism supports.  After you get the script written and installed as `/sbin/nss_exec` then you can install this library.
 
     # This installs it to the system
     sudo make install
@@ -38,15 +38,15 @@ Now update `/etc/nsswitch.conf` and add `exec` to the bits you support.  In this
 Scripting and Debugging
 -----------------------
 
-The lookup script lives at `/sbin/nss_exec_script` and gets one or two parameters:
+The lookup script lives at `/sbin/nss_exec` and gets one or two parameters:
 
     # This is with only one parameter.
     # This call resets the passwd counter.
-    /sbin/nss_exec_script setpwent
+    /sbin/nss_exec setpwent
 
     # Here is a sample call with two parameters.
     # Gets the first passwd entry.
-    /sbin/nss_exec_script getpwent 1
+    /sbin/nss_exec getpwent 1
 
 To help create and debug your script you should build `nss_test`
 
@@ -56,7 +56,7 @@ To help create and debug your script you should build `nss_test`
     # Run the test tool
     nss_test
 
-The test tool will run `./nss_exec_script` so you can work on a copy of the script in the current directory and move it to `/sbin/nss_exec_script` once it is completed.
+The test tool will run `./nss_exec` so you can work on a copy of the script in the current directory and move it to `/sbin/nss_exec` once it is completed.
 
 
 Credits

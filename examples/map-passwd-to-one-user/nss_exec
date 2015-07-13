@@ -1,0 +1,31 @@
+#!/bin/sh
+
+output_user() {
+    echo "test:x:5000:5000::/home/test:/bin/sh"
+}
+
+case "$1" in
+    getpwent)
+        # Gets the password entry.  We're simulating only entry 1 existing
+        if [ "$2" == "1" ]; then
+            output_user
+            exit 0
+        fi
+
+        # Return code 1 = user not found
+        exit 1
+        ;;
+
+    getpwnam)
+        if [ "$2" == "test" ]; then
+            output_user
+            exit 0
+        fi
+
+        # Return code 1 = user not found
+        exit 1
+        ;;
+esac
+
+# Return code 4 = service unavailable
+exit 4

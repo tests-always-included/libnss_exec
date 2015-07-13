@@ -20,7 +20,7 @@ $(LIBRARY): $(OBJECTS)
 	$(CC) -shared $(LD_SONAME) $< $(LIBS) -o $(LIBRARY)
 
 nss_test: *.c nss_exec.h
-	$(CC) $(CFLAGS) -DNSS_EXEC_SCRIPT=\"./script\" nss_exec*.c nss_test.c -o nss_test $(LIBS)
+	$(CC) $(CFLAGS) -DNSS_EXEC_SCRIPT=\"./nss_exec\" nss_exec*.c nss_test.c -o nss_test $(LIBS)
 
 clean:
 	rm -rf $(OBJECTS) $(LIBRARY) nss_test
