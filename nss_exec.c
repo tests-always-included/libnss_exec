@@ -306,6 +306,6 @@ enum nss_status nss_exec_script_long(char **output, char *command, long data) {
     char dataStr[(int) ceil(log10(ULONG_MAX)) + 1];
 
     sprintf(dataStr, "%ld", data);
-    return nss_exec_script(output, "setspent", dataStr);
+    return nss_exec_script(output, command, dataStr);
 }
 
