@@ -36,7 +36,7 @@ int main(void) {
     struct passwd result;
     int err;
 
-    errno = 0;
+    err = 0;
     status = _nss_exec_getpwnam_r("testuser", &result, buffer, 2048, &err);
     printf("errno: %d\n", err);
 
