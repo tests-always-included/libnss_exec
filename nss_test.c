@@ -44,10 +44,10 @@ int main(void) {
         case NSS_STATUS_SUCCESS:
             printf("pw_name %s\n", result.pw_name);
             printf("pw_passwd %s\n", result.pw_passwd);
-            printf("pw_uid %d\n", (int)result.pw_uid);
-            printf("pw_gid %d\n", (int)result.pw_gid);
+            printf("pw_uid %ld\n", (long) result.pw_uid);
+            printf("pw_gid %ld\n", (long) result.pw_gid);
             printf("pw_gecos %s\n", result.pw_gecos);
-            printf("pw_dir%s\n", result.pw_dir); 
+            printf("pw_dir %s\n", result.pw_dir); 
             printf("pw_shell %s\n", result.pw_shell);
             printf("NSS_STATUS_SUCCESS\n");
             break;
