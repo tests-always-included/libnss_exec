@@ -1,13 +1,13 @@
 #!/bin/sh
 
 output_user() {
-    echo "test:x:5000:5000::/home/test:/bin/sh"
+    echo "testuser:x:5000:5000::/home/testuser:/bin/sh"
 }
 
 case "$1" in
     getpwent)
         # Gets the password entry.  We're simulating only entry 1 existing
-        if [ "$2" == "0" ]; then
+        if [ "$2" = "0" ]; then
             output_user
             exit 0
         fi
@@ -17,7 +17,7 @@ case "$1" in
         ;;
 
     getpwnam)
-        if [ "$2" == "test" ]; then
+        if [ "$2" = "testuser" ]; then
             output_user
             exit 0
         fi
@@ -27,7 +27,7 @@ case "$1" in
         ;;
 
     getpwuid)
-        if [ "$2" == "5000" ]; then
+        if [ "$2" = "5000" ]; then
             output_user
             exit 0
         fi
