@@ -58,6 +58,8 @@ To help create and debug your script you should build `nss_test`
 
 The test tool will run `./nss_exec` so you can work on a copy of the script in the current directory and move it to `/sbin/nss_exec` once it is completed.
 
+If things are not working with `sshd` or other services, double check your SELinux rules.  They can mess things up without giving you any diagnostic information in log files.
+
 
 Credits
 -------
