@@ -6,9 +6,13 @@ LD_SONAME=-Wl,-soname,libnss_exec.so.2
 LIBRARY=libnss_exec.so.2.0
 LINKS=libnss_exec.so.2 libnss_exec.so
 
+MACHINE=$(shell uname -m)
 DESTDIR=/
 PREFIX=$(DESTDIR)/usr
-LIBDIR=$(PREFIX)/lib
+LIBDIR.x86_64=$(PREFIX)/lib64
+LIBDIR.i686=$(PREFIX)/lib
+LIBDIR.i386=$(PREFIX)/lib
+LIBDIR=$(LIBDIR.$(MACHINE))
 OBJECTS=nss_exec.o nss_exec-group.o nss_exec-shadow.o nss_exec-passwd.o
 
 all: $(LIBRARY)
