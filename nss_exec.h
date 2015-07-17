@@ -31,6 +31,7 @@ typedef struct {
 #else
 #define EXTERN extern
 #endif
+
 EXTERN void field_parse_init(field_parse_info *info, char *buffer, size_t bufferLength, char *output);
 EXTERN char *field_parse_string(field_parse_info *info);
 EXTERN char **field_parse_string_array(field_parse_info *info);

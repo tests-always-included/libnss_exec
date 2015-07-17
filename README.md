@@ -50,13 +50,20 @@ The lookup script lives at `/sbin/nss_exec` and gets one or two parameters:
 
 To help create and debug your script you should build `nss_test`
 
-    # Build the test tool
-    make nss_test
+    # Build the test tool - this is built automatically with the library
+    make
 
     # Run the test tool
-    nss_test
+    nss_exec_test
 
-The test tool will run `./nss_exec` so you can work on a copy of the script in the current directory and move it to `/sbin/nss_exec` once it is completed.
+The test tool will run `./nss_exec` (the `nss_exec` script in the current working directory) so you can work on a copy of the script and later move it to `/sbin/nss_exec` once it is fully tested.
+
+The test tool lets you simulate calls to the script.  For example, you can see what is returned by a `getpwnam()` call by running this command:
+
+    ./nss_exec_test getpwnam username_goes_here
+
+
+### SELinux
 
 If things are not working with `sshd` or other services, double check your SELinux rules.  They can mess things up without giving you any diagnostic information in log files.
 
