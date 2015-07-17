@@ -23,4 +23,4 @@
 *.swp
 
 # Compiled programs
-nss_test
+nss_exec_test
