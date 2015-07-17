@@ -4,6 +4,10 @@ output_user() {
     echo "testuser:x:5000:5000:Map everyone to one account:/home/testuser:/bin/sh"
 }
 
+output_group() {
+    echo "testgroup:x:5000:testuser"
+}
+
 case "$1" in
     getpwent)
         # Gets the password entry.  We're simulating only entry 1 existing
@@ -25,6 +29,39 @@ case "$1" in
     getpwuid)
         if [ "$2" = "5000" ]; then
             output_user
+            exit 0
+        fi
+
+        # Return code 1 = user not found
+        exit 1
+        ;;
+
+    getgrent)
+        # Returns the group entries.  We only are simulating 1 entry.
+        if [ "$2" = "0" ]; then
+            output_group
+            exit 0
+        fi
+
+        # Return code 1 = user not found
+        exit 1
+        ;;
+
+    getgwnam)
+        # Finds the group "testgroup"
+        if [ "$2" = "testgroup" ]; then
+            output_group
+            exit 0
+        fi
+
+        # Return code 1 = group not found
+        exit 1
+        ;;
+
+    getgrgid)
+        # Only finds the group 5000
+        if [ "$2" = "5000" ]; then
+            output_group
             exit 0
         fi
 
