@@ -53,6 +53,21 @@ int show_nss_result(enum nss_status result, int err) {
     return 1;
 }
 
+void show_group(struct group *grent) {
+    int i;
+
+    printf("group.gr_name: %s\n", grent->gr_name);
+    printf("group.gr_passwd: %s\n", grent->gr_passwd);
+    printf("group.gr_gid: %ld\n", (long) grent->gr_gid);
+    i = 0;
+
+    if (grent->gr_mem) {
+        while (grent->gr_mem[i]) {
+            printf("group.gr_mem[%d]: %s\n", i, grent->gr_mem[i]);
+        }
+    }
+}
+
 void show_passwd(struct passwd *pwent) {
     printf("passwd.pw_name: %s\n", pwent->pw_name);
     printf("passwd.pw_passwd: %s\n", pwent->pw_passwd);
@@ -64,11 +79,45 @@ void show_passwd(struct passwd *pwent) {
 }
 
 int call_getgrgid(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct group grent;
+    int err;
+    long gid;
+
+    if (params->argc < 3) {
+        fprintf(stderr, "getgrgid requires a group id\n");
+        return 1;
+    }
+
+    gid = atol(params->argv[2]);
+    err = 0;
+    result = _nss_exec_getgrgid_r((gid_t) gid, &grent, params->buffer, params->buffer_length, &err);
+
+    if (!show_nss_result(result, err)) {
+        show_group(&grent);
+    }
+
+    return 0;
 }
 
 int call_getgrnam(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct group grent;
+    int err;
+
+    if (params->argc < 3) {
+        fprintf(stderr, "getgrnam requires a name\n");
+        return 1;
+    }
+
+    err = 0;
+    result = _nss_exec_getgrnam_r(params->argv[2], &grent, params->buffer, params->buffer_length, &err);
+
+    if (!show_nss_result(result, err)) {
+        show_group(&grent);
+    }
+
+    return 0;
 }
 
 int call_getpwnam(call_params *params) {
@@ -88,7 +137,7 @@ int call_getpwnam(call_params *params) {
         show_passwd(&pwent);
     }
 
-    return 1;
+    return 0;
 }
 
 int call_getpwuid(call_params *params) {
