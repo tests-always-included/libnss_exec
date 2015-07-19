@@ -36,6 +36,11 @@ case "$1" in
         exit 1
         ;;
 
+    setpwent|endpwent)
+        # Always ready to enumarate the list
+        exit 0
+        ;;
+
     getgrent)
         # Returns the group entries.  We only are simulating 1 entry.
         if [ "$2" = "0" ]; then
@@ -67,6 +72,11 @@ case "$1" in
 
         # Return code 1 = user not found
         exit 1
+        ;;
+
+    setgrent|endgrent)
+        # Always ready to enumerate the list
+        exit 0
         ;;
 esac
 
