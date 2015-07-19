@@ -202,14 +202,18 @@ int call_getspnam(call_params *params) {
 int call_listgrent(call_params *params) {
     enum nss_status result;
     struct group grent;
-    int err;
+    int err, return_code;
     unsigned long entry_number;
 
     printf("setgrent(0)\n");
     err = 0;
+    return_code = 0;
     entry_number = 0;
     result = _nss_exec_setgrent(0);
-    show_nss_result(result, err);
+
+    if (show_nss_result(result, err)) {
+        return_code = 1;
+    }
 
     while (result == NSS_STATUS_SUCCESS) {
         printf("getgrent(%lu)\n", entry_number);
@@ -219,6 +223,10 @@ int call_listgrent(call_params *params) {
         if (show_nss_result(result, err)) {
             show_group(&grent);
         }
+
+        if (err != 0) {
+            return_code = 2;
+        }
     }
 
     printf("endgrent()\n");
@@ -226,20 +234,24 @@ int call_listgrent(call_params *params) {
     result = _nss_exec_endgrent();
     show_nss_result(result, err);
 
-    return 0;
+    return return_code;
 }
 
 int call_listpwent(call_params *params) {
     enum nss_status result;
     struct passwd pwent;
-    int err;
+    int err, return_code;
     unsigned long entry_number;
 
     printf("setpwent(0)\n");
     err = 0;
+    return_code = 0;
     entry_number = 0;
     result = _nss_exec_setpwent(0);
-    show_nss_result(result, err);
+
+    if (show_nss_result(result, err)) {
+        return_code = 1;
+    }
 
     while (result == NSS_STATUS_SUCCESS) {
         printf("getpwent(%lu)\n", entry_number);
@@ -251,6 +263,10 @@ int call_listpwent(call_params *params) {
         if (show_nss_result(result, err)) {
             show_passwd(&pwent);
         }
+
+        if (err != 0) {
+            return_code = 2;
+        }
     }
 
     printf("endpwent()\n");
@@ -258,20 +274,24 @@ int call_listpwent(call_params *params) {
     result = _nss_exec_endpwent();
     show_nss_result(result, err);
 
-    return 0;
+    return return_code;
 }
 
 int call_listspent(call_params *params) {
     enum nss_status result;
     struct spwd spent;
-    int err;
+    int err, return_code;
     unsigned long entry_number;
 
     printf("setspent(0)\n");
     err = 0;
+    return_code = 0;
     entry_number = 0;
     result = _nss_exec_setspent(0);
-    show_nss_result(result, err);
+
+    if (show_nss_result(result, err)) {
+        return_code = 1;
+    }
 
     while (result == NSS_STATUS_SUCCESS) {
         printf("getspent(%lu)\n", entry_number);
@@ -283,6 +303,10 @@ int call_listspent(call_params *params) {
         if (show_nss_result(result, err)) {
             show_spwd(&spent);
         }
+
+        if (err != 0) {
+            return_code = 2;
+        }
     }
 
     printf("endspent()\n");
@@ -290,7 +314,7 @@ int call_listspent(call_params *params) {
     result = _nss_exec_endspent();
     show_nss_result(result, err);
 
-    return 0;
+    return return_code;
 }
 
 void help(void) {
