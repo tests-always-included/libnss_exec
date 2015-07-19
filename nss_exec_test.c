@@ -212,7 +212,7 @@ int call_listgrent(call_params *params) {
     result = _nss_exec_setgrent(0);
 
     if (show_nss_result(result, err)) {
-        return_code = 1;
+        return 1;
     }
 
     while (result == NSS_STATUS_SUCCESS) {
@@ -250,7 +250,7 @@ int call_listpwent(call_params *params) {
     result = _nss_exec_setpwent(0);
 
     if (show_nss_result(result, err)) {
-        return_code = 1;
+        return 1;
     }
 
     while (result == NSS_STATUS_SUCCESS) {
@@ -290,7 +290,7 @@ int call_listspent(call_params *params) {
     result = _nss_exec_setspent(0);
 
     if (show_nss_result(result, err)) {
-        return_code = 1;
+        return 1;
     }
 
     while (result == NSS_STATUS_SUCCESS) {
