@@ -6,14 +6,14 @@
 extern enum nss_status _nss_exec_endgrent(void);
 extern enum nss_status _nss_exec_endpwent(void);
 extern enum nss_status _nss_exec_endspent(void);
-extern enum nss_status _nss_exec_getgrent_r(struct group *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getgrgid_r(gid_t gid, struct group *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getgrnam_r(const char *name, struct group *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getpwent_r(struct passwd *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getpwnam_r(const char *name, struct passwd *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getpwuid_r(uid_t uid, struct passwd *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getspent_r(struct spwd *result, char *buffer, size_t bufferLength, int *errnop);
-extern enum nss_status _nss_exec_getspnam_r(const char *name, struct spwd *result, char *buffer, size_t bufferLength, int *errnop);
+extern enum nss_status _nss_exec_getgrent_r(struct group *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getgrgid_r(gid_t gid, struct group *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getgrnam_r(const char *name, struct group *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getpwent_r(struct passwd *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getpwnam_r(const char *name, struct passwd *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getpwuid_r(uid_t uid, struct passwd *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getspent_r(struct spwd *result, char *buffer, size_t buffer_length, int *errnop);
+extern enum nss_status _nss_exec_getspnam_r(const char *name, struct spwd *result, char *buffer, size_t buffer_length, int *errnop);
 extern enum nss_status _nss_exec_setgrent(int stayopen);
 extern enum nss_status _nss_exec_setpwent(int stayopen);
 extern enum nss_status _nss_exec_setspent(int stayopen);
@@ -30,24 +30,24 @@ typedef struct {
     int (*fn)(call_params *);
 } function_map;
 
-int show_nss_result(enum nss_status result, int err) {
+int show_nss_status(enum nss_status status, int err) {
     printf("errno: %d\n", err);
 
-    if (result == NSS_STATUS_SUCCESS) {
-        printf("NSS_STATUS_SUCCESS (%d)\n", (int) result);
+    if (status == NSS_STATUS_SUCCESS) {
+        printf("NSS_STATUS_SUCCESS (%d)\n", (int) status);
         return 0;
     }
 
-    if (result == NSS_STATUS_NOTFOUND) {
-        printf("NSS_STATUS_NOTFOUND (%d)\n", (int) result);
-    } else if (result == NSS_STATUS_TRYAGAIN) {
-        printf("NSS_STATUS_TRYAGAIN (%d)\n", (int) result);
-    } else if (result == NSS_STATUS_UNAVAIL) {
-        printf("NSS_STATUS_UNAVAIL (%d)\n", (int) result);
-    } else if (result == NSS_STATUS_RETURN) {
-        printf("NSS_STATUS_RETURN (%d)\n", (int) result);
+    if (status == NSS_STATUS_NOTFOUND) {
+        printf("NSS_STATUS_NOTFOUND (%d)\n", (int) status);
+    } else if (status == NSS_STATUS_TRYAGAIN) {
+        printf("NSS_STATUS_TRYAGAIN (%d)\n", (int) status);
+    } else if (status == NSS_STATUS_UNAVAIL) {
+        printf("NSS_STATUS_UNAVAIL (%d)\n", (int) status);
+    } else if (status == NSS_STATUS_RETURN) {
+        printf("NSS_STATUS_RETURN (%d)\n", (int) status);
     } else {
-        printf("Unknown status (%d)\n", (int) result);
+        printf("Unknown status (%d)\n", (int) status);
     }
 
     return 1;
@@ -91,7 +91,7 @@ void show_spwd(struct spwd *spent) {
 }
 
 int call_getgrgid(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct group grent;
     int err;
     long gid;
@@ -104,9 +104,9 @@ int call_getgrgid(call_params *params) {
     gid = atol(params->argv[2]);
     printf("getgrgid(%ld)\n", gid);
     err = 0;
-    result = _nss_exec_getgrgid_r((gid_t) gid, &grent, params->buffer, params->buffer_length, &err);
+    status = _nss_exec_getgrgid_r((gid_t) gid, &grent, params->buffer, params->buffer_length, &err);
 
-    if (!show_nss_result(result, err)) {
+    if (!show_nss_status(status, err)) {
         show_group(&grent);
     }
 
@@ -114,7 +114,7 @@ int call_getgrgid(call_params *params) {
 }
 
 int call_getgrnam(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct group grent;
     int err;
 
@@ -125,9 +125,9 @@ int call_getgrnam(call_params *params) {
 
     printf("getgrnam(\"%s\")\n", params->argv[2]);
     err = 0;
-    result = _nss_exec_getgrnam_r(params->argv[2], &grent, params->buffer, params->buffer_length, &err);
+    status = _nss_exec_getgrnam_r(params->argv[2], &grent, params->buffer, params->buffer_length, &err);
 
-    if (!show_nss_result(result, err)) {
+    if (!show_nss_status(status, err)) {
         show_group(&grent);
     }
 
@@ -135,7 +135,7 @@ int call_getgrnam(call_params *params) {
 }
 
 int call_getpwnam(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct passwd pwent;
     int err;
 
@@ -146,9 +146,9 @@ int call_getpwnam(call_params *params) {
 
     printf("getpwnam(\"%s\")\n", params->argv[2]);
     err = 0;
-    result = _nss_exec_getpwnam_r(params->argv[2], &pwent, params->buffer, params->buffer_length, &err);
+    status = _nss_exec_getpwnam_r(params->argv[2], &pwent, params->buffer, params->buffer_length, &err);
 
-    if (!show_nss_result(result, err)) {
+    if (!show_nss_status(status, err)) {
         show_passwd(&pwent);
     }
 
@@ -156,7 +156,7 @@ int call_getpwnam(call_params *params) {
 }
 
 int call_getpwuid(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct passwd pwent;
     int err;
     long uid;
@@ -169,9 +169,9 @@ int call_getpwuid(call_params *params) {
     uid = atol(params->argv[2]);
     printf("getpwuid(%ld)\n", uid);
     err = 0;
-    result = _nss_exec_getpwuid_r((uid_t) uid, &pwent, params->buffer, params->buffer_length, &err);
+    status = _nss_exec_getpwuid_r((uid_t) uid, &pwent, params->buffer, params->buffer_length, &err);
 
-    if (!show_nss_result(result, err)) {
+    if (!show_nss_status(status, err)) {
         show_passwd(&pwent);
     }
 
@@ -179,7 +179,7 @@ int call_getpwuid(call_params *params) {
 }
 
 int call_getspnam(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct spwd spent;
     int err;
 
@@ -190,9 +190,9 @@ int call_getspnam(call_params *params) {
 
     printf("getspnam(\"%s\")\n", params->argv[2]);
     err = 0;
-    result = _nss_exec_getspnam_r(params->argv[2], &spent, params->buffer, params->buffer_length, &err);
+    status = _nss_exec_getspnam_r(params->argv[2], &spent, params->buffer, params->buffer_length, &err);
 
-    if (!show_nss_result(result, err)) {
+    if (!show_nss_status(status, err)) {
         show_spwd(&spent);
     }
 
@@ -200,7 +200,7 @@ int call_getspnam(call_params *params) {
 }
 
 int call_listgrent(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct group grent;
     int err, return_code;
     unsigned long entry_number;
@@ -209,18 +209,18 @@ int call_listgrent(call_params *params) {
     err = 0;
     return_code = 0;
     entry_number = 0;
-    result = _nss_exec_setgrent(0);
+    status = _nss_exec_setgrent(0);
 
-    if (show_nss_result(result, err)) {
+    if (show_nss_status(status, err)) {
         return 1;
     }
 
-    while (result == NSS_STATUS_SUCCESS) {
+    while (status == NSS_STATUS_SUCCESS) {
         printf("getgrent(%lu)\n", entry_number);
         err = 0;
-        result = _nss_exec_getgrent_r(&grent, params->buffer, params->buffer_length, &err);
+        status = _nss_exec_getgrent_r(&grent, params->buffer, params->buffer_length, &err);
 
-        if (show_nss_result(result, err)) {
+        if (show_nss_status(status, err)) {
             show_group(&grent);
         }
 
@@ -231,14 +231,14 @@ int call_listgrent(call_params *params) {
 
     printf("endgrent()\n");
     err = 0;
-    result = _nss_exec_endgrent();
-    show_nss_result(result, err);
+    status = _nss_exec_endgrent();
+    show_nss_status(status, err);
 
     return return_code;
 }
 
 int call_listpwent(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct passwd pwent;
     int err, return_code;
     unsigned long entry_number;
@@ -247,20 +247,20 @@ int call_listpwent(call_params *params) {
     err = 0;
     return_code = 0;
     entry_number = 0;
-    result = _nss_exec_setpwent(0);
+    status = _nss_exec_setpwent(0);
 
-    if (show_nss_result(result, err)) {
+    if (show_nss_status(status, err)) {
         return 1;
     }
 
-    while (result == NSS_STATUS_SUCCESS) {
+    while (status == NSS_STATUS_SUCCESS) {
         printf("getpwent(%lu)\n", entry_number);
         err = 0;
-        result = _nss_exec_getpwent_r(&pwent, params->buffer, params->buffer_length, &err);
+        status = _nss_exec_getpwent_r(&pwent, params->buffer, params->buffer_length, &err);
 
-        show_nss_result(result, err);
+        show_nss_status(status, err);
 
-        if (show_nss_result(result, err)) {
+        if (show_nss_status(status, err)) {
             show_passwd(&pwent);
         }
 
@@ -271,14 +271,14 @@ int call_listpwent(call_params *params) {
 
     printf("endpwent()\n");
     err = 0;
-    result = _nss_exec_endpwent();
-    show_nss_result(result, err);
+    status = _nss_exec_endpwent();
+    show_nss_status(status, err);
 
     return return_code;
 }
 
 int call_listspent(call_params *params) {
-    enum nss_status result;
+    enum nss_status status;
     struct spwd spent;
     int err, return_code;
     unsigned long entry_number;
@@ -287,20 +287,20 @@ int call_listspent(call_params *params) {
     err = 0;
     return_code = 0;
     entry_number = 0;
-    result = _nss_exec_setspent(0);
+    status = _nss_exec_setspent(0);
 
-    if (show_nss_result(result, err)) {
+    if (show_nss_status(status, err)) {
         return 1;
     }
 
-    while (result == NSS_STATUS_SUCCESS) {
+    while (status == NSS_STATUS_SUCCESS) {
         printf("getspent(%lu)\n", entry_number);
         err = 0;
-        result = _nss_exec_getspent_r(&spent, params->buffer, params->buffer_length, &err);
+        status = _nss_exec_getspent_r(&spent, params->buffer, params->buffer_length, &err);
 
-        show_nss_result(result, err);
+        show_nss_status(status, err);
 
-        if (show_nss_result(result, err)) {
+        if (show_nss_status(status, err)) {
             show_spwd(&spent);
         }
 
@@ -311,8 +311,8 @@ int call_listspent(call_params *params) {
 
     printf("endspent()\n");
     err = 0;
-    result = _nss_exec_endspent();
-    show_nss_result(result, err);
+    status = _nss_exec_endspent();
+    show_nss_status(status, err);
 
     return return_code;
 }

@@ -9,13 +9,13 @@
 /**
  * Initialize a field_parse_info struct
  */
-void field_parse_init(field_parse_info *info, char *buffer, size_t bufferLength, char *output) {
-    memset(buffer, '\0', bufferLength);
-    info->bufferStart = buffer;
-    info->bufferLeft = bufferLength;
+void field_parse_init(field_parse_info *info, char *buffer, size_t buffer_length, char *output) {
+    memset(buffer, '\0', buffer_length);
+    info->buffer_start = buffer;
+    info->buffer_left = buffer_length;
     info->output = output;
-    info->outputOffset = 0;
-    info->returnCode = 0;
+    info->output_offset = 0;
+    info->return_code = 0;
 }
 
 
@@ -28,12 +28,12 @@ char *field_parse_string(field_parse_info *info) {
     char *copy;
 
     // Take no action if we have already hit an error
-    if (info->returnCode) {
+    if (info->return_code) {
         return NULL;
     }
 
     // Determine length of data to copy
-    i = info->outputOffset;
+    i = info->output_offset;
     len = 0;
 
     while (! IS_FIELD_SEPARATOR(info->output[i])) {
@@ -42,31 +42,32 @@ char *field_parse_string(field_parse_info *info) {
     }
 
     // Confirm space is available in the buffer
-    if (len + 1 > info->bufferLeft) {
-        info->returnCode = -2;
+    if (len + 1 > info->buffer_left) {
+        info->return_code = -2;
+        
         return NULL;
     }
 
     // Copy
-    copy = info->bufferStart;
-    i = info->outputOffset;
+    copy = info->buffer_start;
+    i = info->output_offset;
 
     while (len --) {
-        info->bufferStart[0] = info->output[i];
-        info->bufferStart ++;
+        info->buffer_start[0] = info->output[i];
+        info->buffer_start ++;
         i += 1;
     }
 
     // Null terminate the copy
-    info->bufferStart[0] = '\0';
-    info->bufferStart ++;
+    info->buffer_start[0] = '\0';
+    info->buffer_start ++;
 
-    // Update outputOffset
+    // Update output_offset
     if (info->output[i] == ':') {
         i += 1;
     }
 
-    info->outputOffset = i;
+    info->output_offset = i;
 
     return copy;
 }
@@ -78,12 +79,12 @@ char *field_parse_string(field_parse_info *info) {
  * array things like this in C.
  */
 char **field_parse_string_array(field_parse_info *info) {
-    int i, fieldCount, fieldsLength, size;
-    char **split, **returnValue;
+    int i, field_count, fields_length, size;
+    char **split, **return_value;
 
-    fieldCount = 0;  // Number of elements in the array
-    fieldsLength = 0;  // Total string size of array elements including nulls.
-    i = info->outputOffset;  // Generic character counter
+    field_count = 0;  // Number of elements in the array
+    fields_length = 0;  // Total string size of array elements including nulls.
+    i = info->output_offset;  // Generic character counter
 
     // Bypass initial whitespace
     while (IS_WHITESPACE(info->output[i])) {
@@ -91,15 +92,15 @@ char **field_parse_string_array(field_parse_info *info) {
     }
 
     while (! IS_FIELD_SEPARATOR(info->output[i])) {
-        fieldCount += 1;
+        field_count += 1;
 
         // Grab field
         while (! IS_FIELD_SEPARATOR(info->output[i]) && ! IS_WHITESPACE(info->output[i])) {
-            fieldsLength += 1;
+            fields_length += 1;
             i += 1;
         }
 
-        fieldsLength += 1;  // For the eventual NULL byte
+        fields_length += 1;  // For the eventual NULL byte
 
         // Bypass whitespace
         while (IS_WHITESPACE(info->output[i])) {
@@ -108,21 +109,21 @@ char **field_parse_string_array(field_parse_info *info) {
     }
 
     // Size is the amount of data used for the pointers to strings.
-    size = (fieldCount + 1) * sizeof(char *);  // Add one for the null pointer
+    size = (field_count + 1) * sizeof(char *);  // Add one for the null pointer
 
-    if (fieldsLength + size > info->bufferLeft) {
-        info->returnCode = -2;
+    if (fields_length + size > info->buffer_left) {
+        info->return_code = -2;
         return NULL;
     }
 
-    // Just take care of bufferLeft right away
-    info->bufferLeft -= size + fieldsLength;
+    // Just take care of buffer_left right away
+    info->buffer_left -= size + fields_length;
 
     // Allocate the array of pointers
-    split = (char **) info->bufferStart;
-    returnValue = split;  // We move `split` forward
-    info->bufferStart += size;
-    i = info->outputOffset;
+    split = (char **) info->buffer_start;
+    return_value = split;  // We move `split` forward
+    info->buffer_start += size;
+    i = info->output_offset;
 
     // Bypass initial whitespace
     while (IS_WHITESPACE(info->output[i])) {
@@ -130,19 +131,19 @@ char **field_parse_string_array(field_parse_info *info) {
     }
 
     while (! IS_FIELD_SEPARATOR(info->output[i])) {
-        *split = info->bufferStart;
+        *split = info->buffer_start;
         split ++;
 
         // Grab field
         while (! IS_FIELD_SEPARATOR(info->output[i]) && ! IS_WHITESPACE(info->output[i])) {
-            info->bufferStart[0] = info->output[i];
+            info->buffer_start[0] = info->output[i];
             i += 1;
-            info->bufferStart += 1;
+            info->buffer_start += 1;
             i += 1;
         }
 
-        info->bufferStart[0] = '\0';
-        info->bufferStart += 1;
+        info->buffer_start[0] = '\0';
+        info->buffer_start += 1;
 
         // Bypass whitespace
         while (IS_WHITESPACE(info->output[i])) {
@@ -150,7 +151,7 @@ char **field_parse_string_array(field_parse_info *info) {
         }
     }
 
-    return returnValue;
+    return return_value;
 }
 
 
@@ -162,11 +163,11 @@ long field_parse_long(field_parse_info *info) {
     long sign = 1, result = 0;
 
     // Take no action if we have already hit an error
-    if (info->returnCode) {
+    if (info->return_code) {
         return -1;
     }
 
-    i = info->outputOffset;
+    i = info->output_offset;
 
     // Detect a sign - not sure if it is valid in other parts of the system.
     if (info->output[i] == '-') {
@@ -191,7 +192,7 @@ long field_parse_long(field_parse_info *info) {
         i ++;
     }
 
-    info->outputOffset = i;
+    info->output_offset = i;
 
     return result * sign;
 }
@@ -203,18 +204,18 @@ long field_parse_long(field_parse_info *info) {
  */
 int field_parse_more(field_parse_info *info) {
     // Check for errors
-    if (info->returnCode) {
+    if (info->return_code) {
         return 0;
     }
 
     // This field is empty, but we progress past
-    if (info->output[info->outputOffset] == ':') {
-        info->outputOffset += 1;
+    if (info->output[info->output_offset] == ':') {
+        info->output_offset += 1;
         return 0;
     }
 
     // This field is not empty
-    if (info->output[info->outputOffset] != '\0') {
+    if (info->output[info->output_offset] != '\0') {
         return 1;
     }
 
@@ -227,8 +228,8 @@ int field_parse_more(field_parse_info *info) {
  * Common function to change the return code and set errnop based on
  * field parsing results.
  */
-enum nss_status handle_pack_result(int packResult, int *errnop) {
-    if (packResult == -1) {
+enum nss_status handle_pack_result(int pack_result, int *errnop) {
+    if (pack_result == -1) {
         if (errnop) {
             *errnop = ENOENT;
         }
@@ -236,7 +237,7 @@ enum nss_status handle_pack_result(int packResult, int *errnop) {
         return NSS_STATUS_UNAVAIL;
     }
 
-    if (packResult != 0) {
+    if (pack_result != 0) {
         if (errnop) {
             *errnop = ERANGE;
         }
@@ -253,7 +254,7 @@ enum nss_status handle_pack_result(int packResult, int *errnop) {
  *
  * This version can pass additional data as a string.
  */
-enum nss_status nss_exec_script(char **output, char *commandCode, const char *data) {
+enum nss_status nss_exec_script(char **output, char *command_code, const char *data) {
     char command[1024];
     char line[1024];
     FILE *fp;
@@ -264,7 +265,7 @@ enum nss_status nss_exec_script(char **output, char *commandCode, const char *da
         *output = NULL;
     }
 
-    snprintf(command, 1024, "%s %s %s", NSS_EXEC_SCRIPT, commandCode, data ? data : "");
+    snprintf(command, 1024, "%s %s %s", NSS_EXEC_SCRIPT, command_code, data ? data : "");
     command[1024] = '\0'; // Ensure there's a null at the end
 
     fp = popen(command, "r");
