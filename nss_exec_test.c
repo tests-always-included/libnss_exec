@@ -47,7 +47,7 @@ int show_nss_result(enum nss_status result, int err) {
     } else if (result == NSS_STATUS_RETURN) {
         printf("NSS_STATUS_RETURN (%d)\n", (int) result);
     } else {
-        printf("Uknown status (%d)\n", (int) result);
+        printf("Unknown status (%d)\n", (int) result);
     }
 
     return 1;
@@ -78,6 +78,18 @@ void show_passwd(struct passwd *pwent) {
     printf("passwd.pw_shell: %s\n", pwent->pw_shell);
 }
 
+void show_spwd(struct spwd *spent) {
+    printf("spwd.pw_name: %s\n", spent->sp_namp);
+    printf("spwd.pw_spwd: %s\n", spent->sp_pwdp);
+    printf("spwd.sp_lstchg: %ld\n", spent->sp_lstchg);
+    printf("spwd.sp_min: %ld\n", spent->sp_min);
+    printf("spwd.sp_max: %ld\n", spent->sp_max);
+    printf("spwd.sp_warn: %ld\n", spent->sp_warn);
+    printf("spwd.sp_inact: %ld\n", spent->sp_inact);
+    printf("spwd.sp_expire: %ld\n", spent->sp_expire);
+    printf("spwd.sp_flag: %lX\n", spent->sp_flag);
+}
+
 int call_getgrgid(call_params *params) {
     enum nss_status result;
     struct group grent;
@@ -90,6 +102,7 @@ int call_getgrgid(call_params *params) {
     }
 
     gid = atol(params->argv[2]);
+    printf("getgrgid(%ld)\n", gid);
     err = 0;
     result = _nss_exec_getgrgid_r((gid_t) gid, &grent, params->buffer, params->buffer_length, &err);
 
@@ -110,6 +123,7 @@ int call_getgrnam(call_params *params) {
         return 1;
     }
 
+    printf("getgrnam(\"%s\")\n", params->argv[2]);
     err = 0;
     result = _nss_exec_getgrnam_r(params->argv[2], &grent, params->buffer, params->buffer_length, &err);
 
@@ -130,6 +144,7 @@ int call_getpwnam(call_params *params) {
         return 1;
     }
 
+    printf("getpwnam(\"%s\")\n", params->argv[2]);
     err = 0;
     result = _nss_exec_getpwnam_r(params->argv[2], &pwent, params->buffer, params->buffer_length, &err);
 
@@ -141,27 +156,148 @@ int call_getpwnam(call_params *params) {
 }
 
 int call_getpwuid(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct passwd pwent;
+    int err;
+    long uid;
+
+    if (params->argc < 3) {
+        fprintf(stderr, "getpwuid requires a user id\n");
+        return 1;
+    }
+
+    uid = atol(params->argv[2]);
+    printf("getpwuid(%ld)\n", uid);
+    err = 0;
+    result = _nss_exec_getpwuid_r((uid_t) uid, &pwent, params->buffer, params->buffer_length, &err);
+
+    if (!show_nss_result(result, err)) {
+        show_passwd(&pwent);
+    }
+
+    return 0;
 }
 
 int call_getspnam(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct spwd spent;
+    int err;
+
+    if (params->argc < 3) {
+        fprintf(stderr, "getspnam requires a username\n");
+        return 1;
+    }
+
+    printf("getspnam(\"%s\")\n", params->argv[2]);
+    err = 0;
+    result = _nss_exec_getspnam_r(params->argv[2], &spent, params->buffer, params->buffer_length, &err);
+
+    if (!show_nss_result(result, err)) {
+        show_spwd(&spent);
+    }
+
+    return 0;
 }
 
 int call_listgrent(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct group grent;
+    int err;
+    unsigned long entry_number;
+
+    printf("setgrent(0)\n");
+    err = 0;
+    entry_number = 0;
+    result = _nss_exec_setgrent(0);
+    show_nss_result(result, err);
+
+    while (result == NSS_STATUS_SUCCESS) {
+        printf("getgrent(%lu)\n", entry_number);
+        err = 0;
+        result = _nss_exec_getgrent_r(&grent, params->buffer, params->buffer_length, &err);
+
+        if (show_nss_result(result, err)) {
+            show_group(&grent);
+        }
+    }
+
+    printf("endgrent()\n");
+    err = 0;
+    result = _nss_exec_endgrent();
+    show_nss_result(result, err);
+
+    return 0;
 }
 
 int call_listpwent(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct passwd pwent;
+    int err;
+    unsigned long entry_number;
+
+    printf("setpwent(0)\n");
+    err = 0;
+    entry_number = 0;
+    result = _nss_exec_setpwent(0);
+    show_nss_result(result, err);
+
+    while (result == NSS_STATUS_SUCCESS) {
+        printf("getpwent(%lu)\n", entry_number);
+        err = 0;
+        result = _nss_exec_getpwent_r(&pwent, params->buffer, params->buffer_length, &err);
+
+        show_nss_result(result, err);
+
+        if (show_nss_result(result, err)) {
+            show_passwd(&pwent);
+        }
+    }
+
+    printf("endpwent()\n");
+    err = 0;
+    result = _nss_exec_endpwent();
+    show_nss_result(result, err);
+
+    return 0;
 }
 
 int call_listspent(call_params *params) {
-    return 1;
+    enum nss_status result;
+    struct spwd spent;
+    int err;
+    unsigned long entry_number;
+
+    printf("setspent(0)\n");
+    err = 0;
+    entry_number = 0;
+    result = _nss_exec_setspent(0);
+    show_nss_result(result, err);
+
+    while (result == NSS_STATUS_SUCCESS) {
+        printf("getspent(%lu)\n", entry_number);
+        err = 0;
+        result = _nss_exec_getspent_r(&spent, params->buffer, params->buffer_length, &err);
+
+        show_nss_result(result, err);
+
+        if (show_nss_result(result, err)) {
+            show_spwd(&spent);
+        }
+    }
+
+    printf("endspent()\n");
+    err = 0;
+    result = _nss_exec_endspent();
+    show_nss_result(result, err);
+
+    return 0;
 }
 
 void help(void) {
     printf("Calls nss_exec functions.  Available functions, sorted by category.\n"
+        "The list__ent functions all start with one call to set__ent, zero or more\n"
+        "calls to get__ent, and one final call to end__ent.  (Replace __ with the two\n"
+        "letter code for the thing you want.)"
         "\n"
         "group:\n"
         "    getgrnam [NAME]\n"
