@@ -137,7 +137,6 @@ char **field_parse_string_array(field_parse_info *info) {
         // Grab field
         while (! IS_FIELD_SEPARATOR(info->output[i]) && ! IS_WHITESPACE(info->output[i])) {
             info->buffer_start[0] = info->output[i];
-            i += 1;
             info->buffer_start += 1;
             i += 1;
         }

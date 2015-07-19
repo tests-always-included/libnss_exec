@@ -64,6 +64,7 @@ void show_group(struct group *grent) {
     if (grent->gr_mem) {
         while (grent->gr_mem[i]) {
             printf("group.gr_mem[%d]: %s\n", i, grent->gr_mem[i]);
+            i += 1;
         }
     }
 }
@@ -220,13 +221,15 @@ int call_listgrent(call_params *params) {
         err = 0;
         status = _nss_exec_getgrent_r(&grent, params->buffer, params->buffer_length, &err);
 
-        if (show_nss_status(status, err)) {
+        if (!show_nss_status(status, err)) {
             show_group(&grent);
         }
 
         if (err != 0) {
             return_code = 2;
         }
+
+        entry_number += 1;
     }
 
     printf("endgrent()\n");
@@ -258,15 +261,15 @@ int call_listpwent(call_params *params) {
         err = 0;
         status = _nss_exec_getpwent_r(&pwent, params->buffer, params->buffer_length, &err);
 
-        show_nss_status(status, err);
-
-        if (show_nss_status(status, err)) {
+        if (!show_nss_status(status, err)) {
             show_passwd(&pwent);
         }
 
         if (err != 0) {
             return_code = 2;
         }
+
+        entry_number += 1;
     }
 
     printf("endpwent()\n");
@@ -298,15 +301,15 @@ int call_listspent(call_params *params) {
         err = 0;
         status = _nss_exec_getspent_r(&spent, params->buffer, params->buffer_length, &err);
 
-        show_nss_status(status, err);
-
-        if (show_nss_status(status, err)) {
+        if (!show_nss_status(status, err)) {
             show_spwd(&spent);
         }
 
         if (err != 0) {
             return_code = 2;
         }
+
+        entry_number += 1;
     }
 
     printf("endspent()\n");
