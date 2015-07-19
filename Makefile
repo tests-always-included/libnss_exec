@@ -20,12 +20,14 @@ all: $(LIBRARY) nss_exec_test
 
 $(LIBRARY): $(SOURCE) nss_exec.h
 	$(CC) $(CFLAGS) $(CFLAGS_LIB) $(LIBS) $(SOURCE) -o $(LIBRARY)
+	strip $(LIBRARY)
 
 nss_exec_test: $(SOURCE) nss_exec_test.c nss_exec.h
 	$(CC) $(CFLAGS) $(CFLAGS_TEST) $(LIBS) $(SOURCE) nss_exec_test.c -o nss_exec_test $(LIBS)
+	strip nss_exec_test
 
 clean:
-	rm -rf $(OBJECTS) $(LIBRARY) nss_exec test
+	rm -rf $(LIBRARY) nss_exec_test
 
 install:
 	[ -d $(LIBDIR) ] || install -d $(LIBDIR)
