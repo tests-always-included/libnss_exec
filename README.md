@@ -1,7 +1,13 @@
 nss_exec
 ========
 
-This is an extremely basic Name Service Switch module that will execute an arbitrary command so you can extend NSS easier with your amazing scripting abilities.
+This is an extremely basic Name Service Switch module that will execute an arbitrary command so you can extend NSS easier with your amazing scripting abilities.  It is the natural partner to [pam_exec], allowing complete and scripted control over the low level configuration in your system..
+
+What can you do with this plugin?
+
+* Mimic [libnss-ato], where all users will map to one.  See the [examples](examples/map_everyone_to_one/).
+* Add additional [logging](examples/log_everything/).
+* Simulate that a [user exists](examples/testuser/).
 
 
 Caching for More Speed
@@ -158,7 +164,7 @@ Replace `XXX` with your NSS module name.
 NSS Function Meaning
 --------------------
 
-The `set*ent()`, `get*ent()` and `end*ent()` functions are for enumarating through the list.  First, `set*ent()` is called to reset the list pointer to the top.  Next, `get*ent()` is called repeatedly.  If you run out of entries early, `get*ent()` returns `NSS_STATUS_NOTFOUNMD`.  When done, `end*ent()` is called.
+The `set*ent()`, `get*ent()` and `end*ent()` functions are for enumarating through the list.  First, `set*ent()` is called to reset the list pointer to the top.  Next, `get*ent()` is called repeatedly.  If you run out of entries early, `get*ent()` returns `NSS_STATUS_NOTFOUND`.  When done, `end*ent()` is called.
 
 
 NSS Function Return Codes
@@ -177,3 +183,7 @@ License
 -------
 
 This project is licensed under an [MIT License](LICENSE.md).
+
+
+[libnss-ato]: https://github.com/donapieppo/libnss-ato
+[pam-exec]: https://git.fedorahosted.org/cgit/linux-pam.git/tree/modules/pam_exec
