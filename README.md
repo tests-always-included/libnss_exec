@@ -183,6 +183,8 @@ The shell function's return codes are remapped to ones that NSS understands.
 
 NSS_STATUS_RETURN (2) is only supposed to be used internally and so this library does not have a mapping for it.
 
+The above return codes are not applied for the `getXXent` functions.  Any error code returned will get mapped to `ENOENT` (2) and most likely the caller will next call `endXXent` to finish listing the entries.
+
 
 Credits
 -------
