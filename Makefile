@@ -34,4 +34,7 @@ install:
 	install $(LIBRARY) $(LIBDIR)
 	cd $(LIBDIR); for link in $(LINKS); do ln -sf $(LIBRARY) $$link ; done
 
+test:
+	./run_tests
+
 .PHONY: clean install

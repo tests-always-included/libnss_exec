@@ -1,0 +1,50 @@
+#!/bin/bash
+
+failures=0
+cd "${0%/*}"
+echo "Starting test run: $(date)"
+echo ""
+
+for groupName in tests/*/; do
+    command=${groupName%/}
+    command=${command##*/}
+
+    for testNameFull in "$groupName"*; do
+        testName=${testNameFull##*/}
+
+        if [[ "$testName" == "no-arguments" ]]; then
+            testName=""
+        fi
+
+        if [[ -f "$testNameFull" ]] && [[ "$testName" != "nss_exec" ]]; then
+            echo -n "$command $testName ... "
+
+            DIFF=$(cd "$groupName" ;
+                # Do not quote $testName here as it may contain spaces
+                # and we want spaces to separate arguments.
+                ../../nss_exec_test "$command" $testName | \
+                    diff -U5 "../../$testNameFull" -
+            )
+
+            if [[ $? -eq 0 ]]; then
+                echo "pass"
+            else
+                echo "FAIL"
+                echo ""
+                echo "$DIFF"
+                echo ""
+                ((failures++))
+            fi
+        fi
+    done
+done
+
+echo ""
+
+if [[ $failures -gt 0 ]]; then
+    echo "$failures failures detected"
+    exit 1
+fi
+
+echo "All tests pass"
+

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+case "$1" in
+    setgrent|endgrent)
+        exit 0
+        ;;
+
+    getgrent)
+        case "$2" in
+            0)
+                echo "group-zero:x:123"
+                exit 0
+                ;;
+
+            1)
+                echo "group-one:x:234"
+                exit 0
+                ;;
+
+            2)
+                echo "group-two:x:345"
+                exit 0
+                ;;
+
+            3)
+                exit 2
+        esac
+        ;;
+esac
+
+exit 1

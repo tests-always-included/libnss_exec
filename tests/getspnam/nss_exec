@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ "$1" != "getspnam" ]]; then
+    exit 3
+fi
+
+if [[ "$2" == "user" ]]; then
+    echo "user:real_password:12345:0:99999:7:6:5:4:3"
+    exit 0
+fi
+
+exit 1

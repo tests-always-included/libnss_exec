@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ "$1" != "getgrgid" ]]; then
+    exit 3
+fi
+
+if [[ "$2" == "123" ]]; then
+    echo "group-name:x:123"
+    exit 0
+fi
+
+exit 1

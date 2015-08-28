@@ -1,0 +1,10 @@
+getpwnam("user")
+errno: 0
+NSS_STATUS_SUCCESS (1)
+passwd.pw_name: user
+passwd.pw_passwd: x
+passwd.pw_uid: 5000
+passwd.pw_gid: 1000
+passwd.pw_gecos: User Name
+passwd.pw_dir: /home/user
+passwd.pw_shell: /bin/bash

@@ -1,0 +1,27 @@
+setgrent(0)
+errno: 0
+NSS_STATUS_SUCCESS (1)
+getgrent(0)
+errno: 0
+SUCCESS (0)
+group.gr_name: group-zero
+group.gr_passwd: x
+group.gr_gid: 123
+getgrent(1)
+errno: 0
+SUCCESS (0)
+group.gr_name: group-one
+group.gr_passwd: x
+group.gr_gid: 234
+getgrent(2)
+errno: 0
+SUCCESS (0)
+group.gr_name: group-two
+group.gr_passwd: x
+group.gr_gid: 345
+getgrent(3)
+errno: 0
+Unknown status (1)
+endgrent()
+errno: 0
+NSS_STATUS_SUCCESS (1)

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ "$1" != "getgrnam" ]]; then
+    exit 3
+fi
+
+if [[ "$2" == "group-name" ]]; then
+    echo "group-name:x:123"
+    exit 0
+fi
+
+exit 1

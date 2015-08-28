@@ -1,0 +1,6 @@
+getgrgid(123)
+errno: 0
+NSS_STATUS_SUCCESS (1)
+group.gr_name: group-name
+group.gr_passwd: x
+group.gr_gid: 123

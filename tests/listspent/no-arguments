@@ -1,0 +1,45 @@
+setspent(0)
+errno: 0
+NSS_STATUS_SUCCESS (1)
+getspent(0)
+errno: 0
+SUCCESS (0)
+spwd.pw_name: user123
+spwd.pw_spwd: password123
+spwd.sp_lstchg: 12345
+spwd.sp_min: 0
+spwd.sp_max: 99999
+spwd.sp_warn: 1
+spwd.sp_inact: 2
+spwd.sp_expire: 3
+spwd.sp_flag: 4
+getspent(1)
+errno: 0
+SUCCESS (0)
+spwd.pw_name: user456
+spwd.pw_spwd: password456
+spwd.sp_lstchg: 54321
+spwd.sp_min: 99999
+spwd.sp_max: 0
+spwd.sp_warn: 0
+spwd.sp_inact: -1
+spwd.sp_expire: -1
+spwd.sp_flag: FFFFFFFFFFFFFFFF
+getspent(2)
+errno: 0
+SUCCESS (0)
+spwd.pw_name: user789
+spwd.pw_spwd: password789
+spwd.sp_lstchg: 99110
+spwd.sp_min: 12345
+spwd.sp_max: 88888
+spwd.sp_warn: 22
+spwd.sp_inact: 33
+spwd.sp_expire: 44
+spwd.sp_flag: 37
+getspent(3)
+errno: 0
+Unknown status (1)
+endspent()
+errno: 0
+NSS_STATUS_SUCCESS (1)

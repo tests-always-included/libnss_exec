@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ "$1" != "getpwuid" ]]; then
+    exit 3
+fi
+
+if [[ "$2" == "5000" ]]; then
+    echo "user:x:5000:1000:User Name:/home/user:/bin/bash"
+    exit 0
+fi
+
+exit 1

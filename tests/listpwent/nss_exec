@@ -1,0 +1,31 @@
+#!/bin/bash
+
+case "$1" in
+    setpwent|endpwent)
+        exit 0
+        ;;
+
+    getpwent)
+        case "$2" in
+            0)
+                echo "user123:x:123:321:User 123:/home/user123:/bin/bash"
+                exit 0
+                ;;
+
+            1)
+                echo "user456:x:456:654:User 456:/home/user456:/bin/false"
+                exit 0
+                ;;
+
+            2)
+                echo "user789:x:789:987:User 789:/home/user789:/bin/sh"
+                exit 0
+                ;;
+
+            3)
+                exit 1
+        esac
+        ;;
+esac
+
+exit 1

@@ -1,0 +1,12 @@
+getspnam("user")
+errno: 0
+NSS_STATUS_SUCCESS (1)
+spwd.pw_name: user
+spwd.pw_spwd: real_password
+spwd.sp_lstchg: 12345
+spwd.sp_min: 0
+spwd.sp_max: 99999
+spwd.sp_warn: 7
+spwd.sp_inact: 6
+spwd.sp_expire: 5
+spwd.sp_flag: 4

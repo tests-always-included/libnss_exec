@@ -192,8 +192,10 @@ Credits
 Many thanks to [`libnss_http`](https://github.com/gmjosack/nss_http) for the beginnings of this project.
 
 
-License
--------
+Development Information
+-----------------------
+
+Patches should match the existing coding style.  Any warnings while building should be cleaned up.  Add new tests and ensure `make test` runs these tests properly.
 
 This project is licensed under an [MIT License](LICENSE.md).
 

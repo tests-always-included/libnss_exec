@@ -1,0 +1,3 @@
+getpwuid(1000)
+errno: 0
+NSS_STATUS_NOTFOUND (0)
