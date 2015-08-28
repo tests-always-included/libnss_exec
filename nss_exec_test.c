@@ -107,6 +107,8 @@ void show_spwd(struct spwd *spent) {
     printf("spwd.sp_warn: %ld\n", spent->sp_warn);
     printf("spwd.sp_inact: %ld\n", spent->sp_inact);
     printf("spwd.sp_expire: %ld\n", spent->sp_expire);
+
+    // This one is hex because it is special and reserved
     printf("spwd.sp_flag: %lX\n", spent->sp_flag);
 }
 
