@@ -172,7 +172,16 @@ The `set*ent()`, `get*ent()` and `end*ent()` functions are for enumarating throu
 NSS Function Return Codes
 -------------------------
 
-TODO:  Fill this in
+The shell function's return codes are remapped to ones that NSS understands.
+
+| Shell return code     | NSS Name            | NSS Value |
+|-----------------------|---------------------|-----------|
+| 0                     | NSS_STATUS_SUCCESS  | 1         |
+| 1                     | NSS_STATUS_NOTFOUND | 0         |
+| 2                     | NSS_STATUS_TRYAGAIN | -2        |
+| 3 (and anything else) | NSS_STATUS_UNAVAIL  | -1        |
+
+NSS_STATUS_RETURN (2) is only supposed to be used internally and so this library does not have a mapping for it.
 
 
 Credits
@@ -188,4 +197,4 @@ This project is licensed under an [MIT License](LICENSE.md).
 
 
 [libnss-ato]: https://github.com/donapieppo/libnss-ato
-[pam-exec]: https://git.fedorahosted.org/cgit/linux-pam.git/tree/modules/pam_exec
+[pam_exec]: https://git.fedorahosted.org/cgit/linux-pam.git/tree/modules/pam_exec
