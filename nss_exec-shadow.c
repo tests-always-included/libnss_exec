@@ -97,7 +97,11 @@ enum nss_status _nss_exec_getspent_r_locked(struct spwd *result, char *buffer, s
         result_status = handle_pack_result(pack_result, errnop);
     }
 
-    return result_status;
+    if (result_status == NSS_STATUS_SUCCESS) {
+        return 0;
+    } else {
+        return 1;
+    }
 }
 
 

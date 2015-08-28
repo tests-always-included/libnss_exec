@@ -30,6 +30,25 @@ typedef struct {
     int (*fn)(call_params *);
 } function_map;
 
+int show_nssgetent_status(enum nss_status status, int err) {
+    printf("errno: %d\n", err);
+
+    if (status == 0) {
+        printf("SUCCESS (%d)\n", (int) status);
+        return 0;
+    }
+
+    if (status == ENOENT) {
+        printf("ENOENT (%d)\n", (int) status);
+    } else if (status == ERANGE) {
+        printf("ERANGE (%d)\n", (int) status);
+    } else {
+        printf("Unknown status (%d)\n", (int) status);
+    }
+
+    return 1;
+}
+
 int show_nss_status(enum nss_status status, int err) {
     printf("errno: %d\n", err);
 
@@ -216,12 +235,14 @@ int call_listgrent(call_params *params) {
         return 1;
     }
 
-    while (status == NSS_STATUS_SUCCESS) {
+    status = 0;
+
+    while (!status) {
         printf("getgrent(%lu)\n", entry_number);
         err = 0;
         status = _nss_exec_getgrent_r(&grent, params->buffer, params->buffer_length, &err);
 
-        if (!show_nss_status(status, err)) {
+        if (!show_nssgetent_status(status, err)) {
             show_group(&grent);
         }
 
@@ -256,12 +277,14 @@ int call_listpwent(call_params *params) {
         return 1;
     }
 
-    while (status == NSS_STATUS_SUCCESS) {
+    status = 0;
+
+    while (!status) {
         printf("getpwent(%lu)\n", entry_number);
         err = 0;
         status = _nss_exec_getpwent_r(&pwent, params->buffer, params->buffer_length, &err);
 
-        if (!show_nss_status(status, err)) {
+        if (!show_nssgetent_status(status, err)) {
             show_passwd(&pwent);
         }
 
@@ -296,12 +319,14 @@ int call_listspent(call_params *params) {
         return 1;
     }
 
-    while (status == NSS_STATUS_SUCCESS) {
+    status = 0;
+
+    while (!status) {
         printf("getspent(%lu)\n", entry_number);
         err = 0;
         status = _nss_exec_getspent_r(&spent, params->buffer, params->buffer_length, &err);
 
-        if (!show_nss_status(status, err)) {
+        if (!show_nssgetent_status(status, err)) {
             show_spwd(&spent);
         }
 
