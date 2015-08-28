@@ -365,7 +365,7 @@ void help(void) {
         "\n"
         "shadow:\n"
         "    getspnam [NAME]\n"
-        "    listwpent\n");
+        "    listspent\n");
 }
 
 int main(int argc, char **argv) {
