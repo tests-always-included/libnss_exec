@@ -1,4 +1,5 @@
 language: c
+script: make && make test
 notifications:
     irc:
         channels:
