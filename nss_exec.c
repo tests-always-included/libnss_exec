@@ -255,7 +255,7 @@ enum nss_status handle_pack_result(int pack_result, int *errnop) {
  */
 enum nss_status nss_exec_script(char **output, char *command_code, const char *data) {
     char command[1024];
-    char line[1024];
+    static char line[1024];
     FILE *fp;
     int i, resultCode;
 
@@ -272,7 +272,7 @@ enum nss_status nss_exec_script(char **output, char *command_code, const char *d
     resultCode = WEXITSTATUS(pclose(fp));
 
     if (output) {
-        // Cleanse out newlines
+        // Cleanse out newlines and copy
         for (i = 0; line[i]; i += 1) {
             if (line[i] == '\n' || line[i] == '\r') {
                 line[i] = '\0';

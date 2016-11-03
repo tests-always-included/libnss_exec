@@ -27,7 +27,7 @@ There are virtually no external dependencies that are required.  The only thing 
     make
 
     # Build the test tool as well
-    make nss_test
+    make nss_exec_test
 
 Now you should write a script that handles the various calls your mechanism supports.  After you get the script written and installed as `/sbin/nss_exec` then you can install this library.
 
