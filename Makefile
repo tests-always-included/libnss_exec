@@ -10,7 +10,13 @@ LINKS=libnss_exec.so.2 libnss_exec.so
 MACHINE=$(shell uname -m)
 DESTDIR=/
 PREFIX=$(DESTDIR)/usr
-LIBDIR.x86_64=$(PREFIX)/lib64
+LIBDIR.x86_64=$(shell [ -d "$(PREFIX)/lib64" ] && echo "$(PREFIX)/lib64")
+ifeq (, $(LIBDIR.x86_64))
+LIBDIR.x86_64=$(shell [ -d "$(PREFIX)/lib/x86_64-linux-gnu" ] && echo "$(PREFIX)/lib/x86_64-linux-gnu")
+endif
+ifeq (, $(LIBDIR.x86_64))
+LIBDIR.x86_64=$(PREFIX)/lib
+endif
 LIBDIR.i686=$(PREFIX)/lib
 LIBDIR.i386=$(PREFIX)/lib
 LIBDIR=$(LIBDIR.$(MACHINE))
