@@ -258,7 +258,8 @@ enum nss_status nss_exec_script(char **output, char *command_code, const char *d
     char command[1024];
     static char line[1024];
     FILE *fp;
-    int i, pcloseResult, resultCode;
+    int i, resultCode;
+    struct sigaction oldSignalAction;
 
     // Initialize
     if (output) {
@@ -270,18 +271,10 @@ enum nss_status nss_exec_script(char **output, char *command_code, const char *d
 
     fp = popen(command, "r");
     fgets(line, 1024, fp);
-
-    pcloseResult = pclose(fp);
-
-    /* If SIGCHLD is being ignored (as it is with unscd's call to
-     * system(SICHLD, SIG_IGN)) then pclose reports error.  Let's
-     * ignore that specific error.  The child is closed.
-     */
-    if (pcloseResult == -1 && errno == ECHILD) {
-        pcloseResult = 0;
-    }
-
-    resultCode = WEXITSTATUS(pcloseResult);
+    sigaction(SIGCHLD, NULL, &oldSignalAction);
+    signal(SIGCHLD, SIG_DFL);
+    resultCode = WEXITSTATUS(pclose(fp));
+    sigaction(SIGCHLD, &oldSignalAction, NULL);
 
     if (output) {
         // Cleanse out newlines and copy
